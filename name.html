@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <style>
+		
+	</style>
+    </head>
+    <body>
+	<h1 style="text-align: center" >Make an account!</h1>
+        <input id='nm' placeholder='Enter Name'></input>
+        <button onclick='save()'>Enter!</button>
+        <script>
+            var n = document.getElementById('nm');
+            function save(){
+                if (n.value != '' || n.value != ' '){
+                    console.log(n.value);
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            document.cookie = n.value;
+                            window.location.replace('/');                            
+                        }
+                        else if (this.status == 406){
+                            alert("The name that you entered already exists! Choose another name")
+                        }
+                    };
+                    xhttp.open("POST", "http://127.0.0.1/change", true);
+                    xhttp.send(document.cookie+','+n.value);
+                    
+                }
+            }
+        </script>
+    </body>
+</html>

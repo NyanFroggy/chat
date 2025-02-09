@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <title>Chat</title>
+        <style>
+            h1{
+                color: white;
+            }
+            body{
+                background-color: #303030;
+            }
+            #ch{
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 85%;
+                border: solid 2px black;
+                overflow-y: scroll;
+            }
+            textarea{
+                position: absolute;
+                bottom: 0px;
+                left: 0px;
+                width: 90%;
+                height: 15%;
+                background-color: #202020;
+                color: white;
+            }
+            ::placeholder{
+                color: dimgray;
+            }
+            button{
+                position: absolute;
+                bottom: 0px;
+                right: 0px;
+                width: 10%;
+                height: 15%;
+                background-color: #00FFFF;
+                color: #202020;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="ch"></div>
+        <textarea id='textbox' placeholder='enter'></textarea>
+        <button onclick="post()">Enter</button>
+        <script>
+            console.log(document.cookie);
+//document.cookie  = "chutiya bandha";
+            if (document.cookie == ""){
+               // window.location.replace('/name.html');
+                
+            }
+            var ch = document.getElementById('ch');
+            var t = document.getElementById('textbox')
+            t.style.fontSize = (t.offsetHeight*60)/100+'px';
+            var jso = {}
+            var fpn = true;
+            var inp = false;
+            var stp = 0;
+            var mxscr;
+
+            setInterval(()=>{
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var resp = JSON.parse(xhttp.responseText)
+                        if (xhttp.responseText != jso){
+                            ch.innerHTML = '';
+                            
+                            console.log(stp);
+                            for (var i = 0; i < resp.length; i++){
+                                var text = document.createElement('h1');
+                                text.innerText = resp[i];
+                                ch.appendChild(text);
+                                console.log(stp);
+                            }
+                            console.log(stp);
+                            console.log(ch.scrollHeight);
+                            
+                            if (stp > mxscr-300 || fpn){     
+                                console.log('ebihfe');                             
+                                ch.scrollTo(0, ch.scrollHeight);
+                                mxscr = ch.scrollTop;
+                                fpn = false;
+                                
+                            }
+                            jso = xhttp.responseText;
+                        }
+                    }
+                };
+                xhttp.open("POST", "/get", true);
+                xhttp.send();
+                stp = ch.scrollTop;
+                console.log(ch.scrollTop);
+            }, 33);
+
+            async function post(){
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "/post", true);
+                xhttp.onreadystatechange = function() {
+                    
+                };               
+                console.log(t.value);
+                xhttp.send(document.cookie+': '+t.value);
+                
+            }
+        </script>
+    </body>
+</html>
